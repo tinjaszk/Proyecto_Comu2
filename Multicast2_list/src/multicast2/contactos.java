@@ -8,6 +8,10 @@ package multicast2;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.media.NoPlayerException;
 
 /**
  *
@@ -15,9 +19,9 @@ import java.awt.image.BufferedImage;
  */
 public class contactos extends javax.swing.JFrame {
 
-    /**
-     * Creates new form contactos
-     */
+    
+    public chat chat1;
+    
     public contactos() {
         initComponents();
     }
@@ -42,6 +46,7 @@ public class contactos extends javax.swing.JFrame {
         imgc2 = new javax.swing.JLabel();
         cont2 = new javax.swing.JLabel();
         cont3 = new javax.swing.JLabel();
+        cerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,12 +58,24 @@ public class contactos extends javax.swing.JFrame {
         imgc3.setName(""); // NOI18N
 
         imgc1.setName(""); // NOI18N
+        imgc1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                imgc1MouseClicked(evt);
+            }
+        });
 
         imgc2.setName(""); // NOI18N
 
         cont2.setText("contacto");
 
         cont3.setText("contacto");
+
+        cerrar.setText("cerrar sesion");
+        cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cerrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -83,6 +100,10 @@ public class contactos extends javax.swing.JFrame {
                         .addGap(64, 64, 64)
                         .addComponent(jLabel1)))
                 .addContainerGap(123, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cerrar)
+                .addGap(18, 18, 18))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,11 +131,31 @@ public class contactos extends javax.swing.JFrame {
                         .addGap(36, 36, 36))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cont3)
-                        .addGap(60, 60, 60))))
+                        .addGap(26, 26, 26)
+                        .addComponent(cerrar)
+                        .addContainerGap())))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void imgc1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imgc1MouseClicked
+        try {
+            chat1 = new chat();
+            //chat1.show();
+        } catch (IOException | NoPlayerException ex) {
+            Logger.getLogger(contactos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }//GEN-LAST:event_imgc1MouseClicked
+
+    private void cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarActionPerformed
+            
+        
+             
+        
+    }//GEN-LAST:event_cerrarActionPerformed
 
     
     
@@ -154,6 +195,7 @@ public class contactos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton cerrar;
     public javax.swing.JLabel cont1;
     public javax.swing.JLabel cont2;
     public javax.swing.JLabel cont3;

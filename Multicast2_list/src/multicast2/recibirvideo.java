@@ -11,32 +11,32 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.net.DatagramPacket;
-import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.net.MulticastSocket;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import multicast2.ImagenPack;
 
 
 public class recibirvideo extends Thread {
 	
 	int PuertoRecepcion;
 	MulticastSocket Escuchador;
-	
+	public String midireccion; 
 	boolean Correr;
 	JLabel Reproductor;
 	
-	recibirvideo(int Puertorecepcion, String Grupo, JLabel repro){
+	recibirvideo(int Puertorecepcion, String Grupo, JLabel repro, String dir){
 		Correr=true;
-		Inet6Address DirG;
+		InetAddress DirG;
 		Reproductor = repro;
+                midireccion=dir;
 		PuertoRecepcion= Puertorecepcion;
 		try {
-			DirG = (Inet6Address) Inet6Address.getByName(Grupo);
+			DirG =   InetAddress.getByName(Grupo);
 			Escuchador = new MulticastSocket(PuertoRecepcion);
 			Escuchador.joinGroup(DirG);
-			Escuchador.setSendBufferSize(20000);
+			Escuchador.setSendBufferSize(100000);
 			start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -52,27 +52,41 @@ public class recibirvideo extends Thread {
 	}
 	
 	@SuppressWarnings("deprecation")
+        @Override
 	public void run(){
 		
-		 byte [] cadena = new byte[20000] ; 
+		 byte [] cadena = new byte[1000000] ; 
 		 DatagramPacket mensaje = new DatagramPacket(cadena, cadena.length);
 		 while(Correr){
 			 try {
 				 Escuchador.receive(mensaje);
-				 ByteArrayInputStream bs= new ByteArrayInputStream(cadena); // bytes es el byte[]
-				 ObjectInputStream is = new ObjectInputStream(bs);
-				 try {
-					ImagenPack pack = (ImagenPack)is.readObject();
-					OutputStream out = new FileOutputStream("cache.jpg");
-					out.write(pack.F);
-					out.close();
-					ImageIcon mmm = new ImageIcon(pack.F);
-					Reproductor.setIcon( mmm);
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				 is.close();
+                                 
+                                                                     
+                                 System.out.println(" DIRECCION: "+mensaje.getAddress().toString()+" MENSAJE: "+mensaje.toString());
+
+                                 
+                                 if ( !mensaje.getAddress().toString().equals(midireccion) )
+                                 {
+                                     
+                                     System.out.println(" IF DIRECCION: "+mensaje.getAddress().toString()+" MENSAJE: "+mensaje.toString());
+                                           
+                                     ByteArrayInputStream bs= new ByteArrayInputStream(cadena); // bytes es el byte[]
+                                            ObjectInputStream is = new ObjectInputStream(bs);
+                                            
+                                            try {
+                                                   ImagenPack pack = (ImagenPack)is.readObject();
+                                                   OutputStream out = new FileOutputStream("cache.jpg");
+                                                   out.write(pack.F);
+                                                   out.close();
+                                                   ImageIcon mmm = new ImageIcon(pack.F);
+                                                   Reproductor.setIcon( mmm);
+                                           } catch (ClassNotFoundException e) {
+                                                   // TODO Auto-generated catch block
+                                                   e.printStackTrace();
+                                           }
+                                            is.close();
+                                 }//getaddress
+                                 
 				 //System.out.println("MensajeMulticastC: "+ Mensaje + " "+ mensaje.getAddress().toString() );
 			 } catch (IOException e) {
 				// TODO Auto-generated catch block

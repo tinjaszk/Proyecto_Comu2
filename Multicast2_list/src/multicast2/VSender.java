@@ -42,6 +42,10 @@ class VSender implements Serializable{
 		Avisador.close();
 	}
 	
+        public void cerrarconex()
+        {
+            Avisador.close();
+        }
 	
 	public void Send(ImagenPack Imagen, String Grupo) throws IOException{
 	
